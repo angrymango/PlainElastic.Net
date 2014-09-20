@@ -162,6 +162,17 @@ namespace PlainElastic.Net.Queries
 			return this;
 		}
 
+		/// <summary> 
+		/// A special single bucket aggregation that enables aggregating on parent docs from nested documents. Effectively this aggregation can break out of the nested block structure and link to other nested structures or the root document, which allows nesting other aggregations that aren�t part of the nested object in a nested aggregation.
+		/// The reverse_nested aggregation must be defined inside a nested aggregation.
+		/// see http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search-aggregations-bucket-reverse-nested-aggregation.html
+		/// </summary>
+		public Aggregations<T> ReverseNested(Func<ReverseNestedAggregation<T>, ReverseNestedAggregation<T>> reverseNested)
+		{
+			RegisterJsonPartExpression(reverseNested);
+			return this;
+		}
+
         /// <summary>
 		/// A multi-bucket values source based aggregation that can be applied on numeric values extracted from the documents. It dynamically builds fixed size (a.k.a. interval) buckets over the values. For example, if the documents have a field that holds a price (numeric), we can configure this aggregation to dynamically build buckets with interval 5 (in case of price it may represent $5). When the aggregation executes, the price field of every document will be evaluated and will be rounded down to its closest bucket - for example, if the price is 32 and the bucket size is 5 then the rounding will yield 30 and thus the document will "fall" into the bucket that is associated withe the key 30.
 		/// see http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search-aggregations-bucket-histogram-aggregation.html
